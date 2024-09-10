@@ -1,39 +1,81 @@
-@model Tarea3.Models.Mascota
-
+@model Tarea3.Models.MascotaViewModel
 
 @{
-    ViewData["title"]="Mascota";
+    ViewData["Title"] = "Mascotas";
 }
-<div>
-    <h1 class="text-center mb-4">Formulario de Mascotas</h1>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form asp-controller="Mascota" asp-action="Enviar" method="post">
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label asp-for="Raza" class="control-label"></label>
-                    <input asp-for="Raza" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label asp-for="Color" class="control-label"></label>
-                    <input asp-for="Color" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label asp-for="FechaNacimiento" class="control-label"></label>
-                    <input asp-for="FechaNacimiento" class="form-control" type="date">
-                </div>
-                <br>
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">Registrar</button>
-                </div>
-            </form>
-            <h1>@ViewData["Message"]</h1>
-            <div>
-                <a asp-action="Index">Back to list</a>
+
+<h1 class="text-center">Formulario de Mascotas</h1>
+
+<!-- Formulario de Creación -->
+<div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+        <form asp-controller="Mascota" asp-action="Create" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label asp-for="Mascota.Name" class="control-label">Nombre</label>
+                <input asp-for="Mascota.Name" class="form-control" />
+                <span asp-validation-for="Mascota.Name" class="text-danger"></span>
             </div>
-        </div>
+            <div class="form-group">
+                <label asp-for="Mascota.Raza" class="control-label">Raza</label>
+                <input asp-for="Mascota.Raza" class="form-control" />
+                <span asp-validation-for="Mascota.Raza" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mascota.Color" class="control-label">Color</label>
+                <input asp-for="Mascota.Color" class="form-control" />
+                <span asp-validation-for="Mascota.Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mascota.FechaNacimiento" class="control-label">Fecha de Nacimiento</label>
+                <input asp-for="Mascota.FechaNacimiento" class="form-control" type="date" />
+                <span asp-validation-for="Mascota.FechaNacimiento" class="text-danger"></span>
+            </div>
+            <br>
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Añadir Mascota</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Lista de Mascotas -->
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <h2 class="text-center">Lista de Mascotas</h2>
+        @if (Model.Mascotas.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Raza</th>
+                        <th>Color</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Mascotas)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Raza</td>
+                            <td>@item.Color</td>
+                            <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <form asp-action="Delete" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No hay mascotas registradas.</p>
+        }
     </div>
 </div>

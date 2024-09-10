@@ -13,29 +13,55 @@ namespace Tarea3.Controllers
     [Route("mascota")]
     public class MascotaController : Controller
     {
-        private readonly ILogger<MascotaController> _logger;
         private readonly ApplicationDbContext _context;
 
-        public MascotaController(ILogger<MascotaController> logger, ApplicationDbContext context)
+        public MascotaController(ApplicationDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
-
+       
         [HttpGet("index")]
         public IActionResult Index()
         {
-            return View();
-        }
-        [HttpPost("enviar")]
-        public IActionResult Enviar(Mascota objmascota)
-        {
-            _logger.LogDebug("Ingreso a Enviar Mensaje");
-            _context.Add(objmascota);
-            _context.SaveChanges();
+            var viewModel = new MascotaViewModel
+            {
+                Mascota = new Mascota(),
+                Mascotas = _context.DataMascota.ToList() 
+            };
 
-            ViewData["Message"] = "Se registró la mascota";
-            return View("Index");
+            return View(viewModel);
+        }
+
+        [HttpPost("create")]
+        public IActionResult Create(Mascota mascota)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.DataMascota.Add(mascota);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new MascotaViewModel
+            {
+                Mascota = mascota,
+                Mascotas = _context.DataMascota.ToList()
+                
+            };
+
+            return View("Index", viewModel);
+        }
+        [HttpPost("delete")]
+        public IActionResult Delete(int id)
+        {
+            var mascota = _context.DataMascota.Find(id);
+            if (mascota != null)
+            {
+                _context.DataMascota.Remove(mascota);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
         }
         [HttpGet("error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
