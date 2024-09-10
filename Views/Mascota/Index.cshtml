@@ -1,0 +1,39 @@
+@model Tarea3.Models.Mascota
+
+
+@{
+    ViewData["title"]="Mascota";
+}
+<div>
+    <h1 class="text-center mb-4">Formulario de Mascotas</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-controller="Mascota" asp-action="Enviar" method="post">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Raza" class="control-label"></label>
+                    <input asp-for="Raza" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label asp-for="Color" class="control-label"></label>
+                    <input asp-for="Color" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label asp-for="FechaNacimiento" class="control-label"></label>
+                    <input asp-for="FechaNacimiento" class="form-control" type="date">
+                </div>
+                <br>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </div>
+            </form>
+            <h1>@ViewData["Message"]</h1>
+            <div>
+                <a asp-action="Index">Back to list</a>
+            </div>
+        </div>
+    </div>
+</div>
